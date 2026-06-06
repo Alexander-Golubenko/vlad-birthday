@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VladLand — Dein Bon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Unbounded:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --black: #0a0a0a; --white: #f5f0e8; --yellow: #ffe600; --paper: #faf6ee; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Courier Prime', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 24px;
+    }
+
+    .ticker {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: var(--yellow);
+      color: var(--black);
+      font-family: 'Unbounded', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      overflow: hidden;
+      z-index: 100;
+      padding: 6px 0;
+    }
+    .ticker-inner { display: inline-block; animation: ticker 18s linear infinite; }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    .logo {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 36px;
+      font-weight: 900;
+      margin-bottom: 4px;
+      margin-top: 20px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.1s forwards;
+    }
+    .logo span { color: var(--yellow); }
+
+    .tagline {
+      font-size: 12px;
+      color: rgba(245,240,232,0.4);
+      letter-spacing: 0.15em;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.2s forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .receipt-frame {
+      background: var(--paper);
+      color: #111;
+      width: 100%;
+      max-width: 380px;
+      border-radius: 2px;
+      padding: 28px 28px 20px;
+      box-shadow: 8px 8px 0 var(--yellow);
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.3s forwards;
+      position: relative;
+    }
+
+    .receipt-frame::before {
+      content: '';
+      position: absolute;
+      top: -12px; left: 0; right: 0;
+      height: 12px;
+      background: repeating-linear-gradient(90deg, var(--paper) 0px, var(--paper) 8px, transparent 8px, transparent 14px);
+    }
+    .receipt-frame::after {
+      content: '';
+      position: absolute;
+      bottom: -12px; left: 0; right: 0;
+      height: 12px;
+      background: repeating-linear-gradient(90deg, var(--paper) 0px, var(--paper) 8px, transparent 8px, transparent 14px);
+    }
+
+    .r-store { font-weight: 700; font-size: 18px; letter-spacing: 0.05em; text-align: center; }
+    .r-addr { font-size: 10px; color: #555; margin-top: 2px; line-height: 1.5; text-align: center; margin-bottom: 16px; }
+    .r-divider { border: none; border-top: 1px dashed #bbb; margin: 10px 0; }
+    .r-divider-solid { border: none; border-top: 1px solid #555; margin: 10px 0; }
+    .r-col-header { display: flex; justify-content: space-between; font-size: 9px; color: #888; margin-bottom: 4px; }
+    .r-item { display: flex; justify-content: space-between; font-size: 11px; line-height: 1.7; gap: 8px; }
+    .r-item-name { flex: 1; }
+    .r-item-price { white-space: nowrap; }
+    .r-discount { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; padding-left: 12px; }
+    .r-summe { text-align: center; font-weight: 700; font-size: 13px; margin: 8px 0; line-height: 1.5; }
+    .r-footer-row { display: flex; justify-content: space-between; font-size: 10px; color: #555; }
+    .r-scan-hint { text-align: center; font-size: 10px; color: #666; margin: 10px 0 6px; }
+    .r-customer { text-align: center; font-size: 13px; font-weight: 700; margin: 8px 0 4px; letter-spacing: 0.05em; }
+    .barcode-wrap { text-align: center; margin: 8px 0 4px; }
+    .barcode-text { font-size: 9px; letter-spacing: 3px; color: #555; margin-top: 2px; }
+
+    .actions {
+      margin-top: 48px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.9s forwards;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      font-family: 'Unbounded', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      border-radius: 2px;
+      cursor: pointer;
+      text-decoration: none;
+      border: none;
+    }
+
+    .btn-primary { background: var(--yellow); color: var(--black); }
+    .btn-secondary { background: transparent; color: rgba(245,240,232,0.5); border: 1px solid rgba(245,240,232,0.2); }
+    .btn:hover { opacity: 0.85; }
+
+    .empty-msg {
+      text-align: center;
+      font-size: 13px;
+      color: rgba(245,240,232,0.4);
+      margin: 20px 0;
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+
+<div class="ticker">
+  <span class="ticker-inner">
+    VLADLAND &nbsp;•&nbsp; DEIN PERSÖNLICHER BON &nbsp;•&nbsp; GUTE LAUNE UNBEGRENZT &nbsp;•&nbsp; 20.06.2026 &nbsp;•&nbsp; VLADLAND &nbsp;•&nbsp; DEIN PERSÖNLICHER BON &nbsp;•&nbsp; GUTE LAUNE UNBEGRENZT &nbsp;•&nbsp; 20.06.2026 &nbsp;•&nbsp;
+  </span>
+</div>
+
+<div class="logo">Vlad<span>Land</span></div>
+<div class="tagline">DEIN PERSÖNLICHER BON</div>
+
+<div class="receipt-frame" id="receipt">
+  <div class="r-store">VladLand</div>
+  <div class="r-addr">
+    Bergdriesch 32-36, 52062 Aachen<br>
+    VladLand GmbH • Aachen
+  </div>
+
+  <hr class="r-divider-solid">
+  <div class="r-customer" id="customer-display"></div>
+  <hr class="r-divider">
+
+  <div class="r-col-header"><span>Artikel</span><span>Preis</span></div>
+  <hr class="r-divider">
+
+  <div id="bon-items"></div>
+
+  <div class="r-item">
+    <span class="r-item-name">Schlechte Laune x 0 St.</span>
+    <span class="r-item-price">0,00</span>
+  </div>
+
+  <hr class="r-divider">
+  <div class="r-discount"><span>Vlad-Sonderangebot</span><span>-100%</span></div>
+  <hr class="r-divider-solid">
+
+  <div class="r-summe">Summe:<br>Der beste Tag des Jahres!</div>
+  <hr class="r-divider-solid">
+
+  <div class="r-footer-row" id="bon-date-row"></div>
+  <div class="r-footer-row"><span>Filiale: VAG-AAG</span><span>Kasse: 01</span></div>
+
+  <hr class="r-divider">
+  <div class="r-scan-hint">Scanne &amp; erhalte eine Überraschung!</div>
+
+  <div style="text-align:center;margin:6px 0 2px;">
+    <img src="qr.png" alt="QR Code" style="width:90px;height:90px;display:block;margin:0 auto;">
+  </div>
+
+  <div class="barcode-wrap">
+    <svg width="200" height="36" viewBox="0 0 200 36" xmlns="http://www.w3.org/2000/svg" id="barcode-svg" style="display:block;margin:0 auto;"></svg>
+    <div class="barcode-text">20.06.2026 &nbsp; 13</div>
+  </div>
+
+  <hr class="r-divider">
+  <div style="text-align:center;font-size:10px;color:#555;margin-top:4px;">
+    Durch VladLand wurden 100% Traurigkeit gespart.
+  </div>
+</div>
+
+<div class="actions">
+  <a href="shop.html" class="btn btn-primary">NEUER BON →</a>
+  <a href="index.html" class="btn btn-secondary">← VladLand</a>
+</div>
+
+<script>
+// Barcode
+(function() {
+  const svg = document.getElementById('barcode-svg');
+  const data = '20062026 13';
+  const H = 36, narrow = 1.4, wide = 3.2;
+  let x = 4;
+  for (let i = 0; i < data.length; i++) {
+    const c = data.charCodeAt(i);
+    for (let b = 7; b >= 0; b--) {
+      const bit = (c >> b) & 1;
+      const w = (i * 8 + (7 - b)) % 5 === 0 ? wide : narrow;
+      if (bit === 1) {
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', x); rect.setAttribute('y', 0);
+        rect.setAttribute('width', w); rect.setAttribute('height', H);
+        rect.setAttribute('fill', '#222');
+        svg.appendChild(rect);
+      }
+      x += w + 0.7;
+      if (x > 196) break;
+    }
+    if (x > 196) break;
+  }
+})();
+
+// Load bon data
+const raw = localStorage.getItem('vladland_bon');
+if (!raw) {
+  document.getElementById('bon-items').innerHTML = '<div class="empty-msg">Kein Bon gefunden.<br>Bitte geh zurück und erstelle deinen Bon.</div>';
+} else {
+  const data = JSON.parse(raw);
+
+  // Customer name
+  document.getElementById('customer-display').textContent = 'Für: ' + data.name;
+
+  // Date row
+  const today = new Date().toLocaleDateString('de-DE').replace(/\//g, '.');
+  document.getElementById('bon-date-row').innerHTML =
+    `<span>Datum: ${today}</span><span>Bon: ${data.name}</span>`;
+
+  // Items
+  const container = document.getElementById('bon-items');
+  if (data.items.length === 0) {
+    container.innerHTML = '<div class="r-item"><span class="r-item-name" style="color:#aaa;font-style:italic;">Nichts ausgewählt</span></div>';
+  } else {
+    data.items.forEach(item => {
+      const qtyLabel = item.qty === 999 ? 'Unbegrenzt' : `${item.qty} ${item.unit}`;
+      const div = document.createElement('div');
+      div.className = 'r-item';
+      div.innerHTML = `<span class="r-item-name">${item.name} x ${qtyLabel}</span><span class="r-item-price">0,00</span>`;
+      container.appendChild(div);
+    });
+  }
+}
+</script>
+</body>
+</html>

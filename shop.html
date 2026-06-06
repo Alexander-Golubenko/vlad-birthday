@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VladLand — Mein Bon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Unbounded:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --black: #0a0a0a; --white: #f5f0e8; --yellow: #ffe600; --paper: #faf6ee; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Courier Prime', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 24px;
+    }
+
+    .ticker {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: var(--yellow);
+      color: var(--black);
+      font-family: 'Unbounded', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      overflow: hidden;
+      z-index: 100;
+      padding: 6px 0;
+    }
+    .ticker-inner { display: inline-block; animation: ticker 18s linear infinite; }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    .logo {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 36px;
+      font-weight: 900;
+      margin-bottom: 4px;
+      margin-top: 20px;
+    }
+    .logo span { color: var(--yellow); }
+
+    .tagline {
+      font-size: 12px;
+      color: rgba(245,240,232,0.4);
+      letter-spacing: 0.15em;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      background: var(--paper);
+      color: #111;
+      width: 100%;
+      max-width: 480px;
+      border-radius: 2px;
+      padding: 28px;
+      box-shadow: 8px 8px 0 var(--yellow);
+    }
+
+    .card-title {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 20px;
+      letter-spacing: 0.05em;
+    }
+
+    .name-row {
+      margin-bottom: 28px;
+    }
+
+    .name-row label {
+      display: block;
+      font-size: 11px;
+      color: #888;
+      margin-bottom: 6px;
+      letter-spacing: 0.08em;
+    }
+
+    .name-row input {
+      width: 100%;
+      font-family: 'Courier Prime', monospace;
+      font-size: 15px;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 2px;
+      background: #fff;
+      color: #111;
+      outline: none;
+    }
+
+    .name-row input:focus { border-color: #111; }
+
+    .divider { border: none; border-top: 1px dashed #bbb; margin: 16px 0; }
+
+    .item-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+      gap: 12px;
+    }
+
+    .item-row:last-child { border-bottom: none; }
+
+    .item-name {
+      font-size: 12px;
+      flex: 1;
+      line-height: 1.4;
+    }
+
+    .item-limit {
+      font-size: 10px;
+      color: #999;
+      white-space: nowrap;
+    }
+
+    .item-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-qty {
+      width: 28px;
+      height: 28px;
+      border: 1px solid #ccc;
+      background: #fff;
+      border-radius: 2px;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #111;
+      font-family: 'Courier Prime', monospace;
+      transition: background 0.15s;
+    }
+    .btn-qty:hover { background: #f0f0f0; }
+    .btn-qty:disabled { opacity: 0.3; cursor: default; }
+
+    .qty-display {
+      font-size: 14px;
+      font-weight: 700;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .locked-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: 12px;
+      color: #aaa;
+      border-bottom: 1px solid #eee;
+      font-style: italic;
+    }
+
+    .submit-btn {
+      width: 100%;
+      margin-top: 28px;
+      padding: 14px;
+      background: #111;
+      color: var(--yellow);
+      font-family: 'Unbounded', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .submit-btn:hover { background: #222; }
+
+    .back-link {
+      margin-top: 24px;
+      font-size: 11px;
+      color: rgba(245,240,232,0.3);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+    }
+    .back-link:hover { color: rgba(245,240,232,0.6); }
+
+    .error-msg {
+      color: #c00;
+      font-size: 11px;
+      margin-top: 6px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="ticker">
+  <span class="ticker-inner">
+    VLADLAND &nbsp;•&nbsp; ERSTELLE DEINEN EIGENEN BON &nbsp;•&nbsp; GUTE LAUNE UNBEGRENZT &nbsp;•&nbsp; 20.06.2026 &nbsp;•&nbsp; VLADLAND &nbsp;•&nbsp; ERSTELLE DEINEN EIGENEN BON &nbsp;•&nbsp; GUTE LAUNE UNBEGRENZT &nbsp;•&nbsp; 20.06.2026 &nbsp;•&nbsp;
+  </span>
+</div>
+
+<div class="logo">Vlad<span>Land</span></div>
+<div class="tagline">MEIN EIGENER BON</div>
+
+<div class="card">
+  <div class="card-title">WAS NIMMST DU MIT?</div>
+
+  <div class="name-row">
+    <label>DEIN NAME</label>
+    <input type="text" id="customer-name" placeholder="z.B. Max" maxlength="30">
+    <div class="error-msg" id="name-error">Bitte gib deinen Namen ein.</div>
+  </div>
+
+  <hr class="divider">
+
+  <div id="items-list">
+    <!-- Items rendered by JS -->
+  </div>
+
+  <div class="locked-row">
+    <span>Schlechte Laune</span>
+    <span>0 St. — nicht verfügbar</span>
+  </div>
+
+  <button class="submit-btn" onclick="generateBon()">BON ERSTELLEN →</button>
+</div>
+
+<a href="index.html" class="back-link">← Zurück zu VladLand</a>
+
+<script>
+const ITEMS = [
+  { name: "Gute Laune",           unit: "unbegrenzt", max: 999 },
+  { name: "Lachen ohne Grund",    unit: "St.",        max: 10  },
+  { name: "Tanzen in der Pause",  unit: "St.",        max: 5   },
+  { name: "Süßigkeiten-Paket",    unit: "St.",        max: 1   },
+  { name: "Bester-Tag-Gefühl",    unit: "unbegrenzt", max: 999 },
+  { name: "Freundschaft Premium", unit: "St.",        max: 1   },
+  { name: "Glück (frisch gelief.)",unit: "St.",       max: 1   },
+];
+
+const quantities = ITEMS.map(() => 0);
+
+function render() {
+  const list = document.getElementById('items-list');
+  list.innerHTML = '';
+  ITEMS.forEach((item, i) => {
+    const isUnlimited = item.max === 999;
+    const limitLabel = isUnlimited ? 'unbegrenzt' : `max. ${item.max} ${item.unit}`;
+    const row = document.createElement('div');
+    row.className = 'item-row';
+    row.innerHTML = `
+      <div class="item-name">${item.name}<br><span class="item-limit">${limitLabel}</span></div>
+      <div class="item-controls">
+        <button class="btn-qty" onclick="change(${i}, -1)" id="minus-${i}" ${quantities[i] === 0 ? 'disabled' : ''}>−</button>
+        <div class="qty-display" id="qty-${i}">${isUnlimited && quantities[i] === 999 ? '∞' : quantities[i]}</div>
+        <button class="btn-qty" onclick="change(${i}, 1)" id="plus-${i}" ${!isUnlimited && quantities[i] >= item.max ? 'disabled' : ''}>+</button>
+      </div>
+    `;
+    list.appendChild(row);
+  });
+}
+
+function change(i, delta) {
+  const item = ITEMS[i];
+  const isUnlimited = item.max === 999;
+  if (isUnlimited) {
+    if (delta > 0) quantities[i] = 999;
+    else quantities[i] = 0;
+  } else {
+    quantities[i] = Math.max(0, Math.min(item.max, quantities[i] + delta));
+  }
+  render();
+}
+
+function generateBon() {
+  const name = document.getElementById('customer-name').value.trim();
+  const err = document.getElementById('name-error');
+  if (!name) { err.style.display = 'block'; return; }
+  err.style.display = 'none';
+
+  const selected = ITEMS.map((item, i) => ({
+    name: item.name,
+    qty: quantities[i],
+    unit: item.unit,
+    max: item.max
+  })).filter(it => it.qty > 0);
+
+  const data = {
+    name,
+    items: selected,
+    date: new Date().toLocaleDateString('de-DE')
+  };
+
+  localStorage.setItem('vladland_bon', JSON.stringify(data));
+  window.location.href = 'bon.html';
+}
+
+render();
+</script>
+</body>
+</html>
