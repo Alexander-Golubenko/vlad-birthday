@@ -66,7 +66,7 @@
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: 560px;
+      max-width: 860px;
       padding: 80px 24px 60px;
       display: flex;
       flex-direction: column;
@@ -224,8 +224,7 @@
 
     .gif-placeholder {
       width: 100%;
-      max-width: 400px;
-      aspect-ratio: 4/3;
+      max-width: 800px;
       background: #111;
       border: 1px dashed rgba(255,230,0,0.3);
       border-radius: 4px;
@@ -250,7 +249,7 @@
 
     .gif-real {
       width: 100%;
-      max-width: 400px;
+      max-width: 800px;
       border-radius: 4px;
       display: none;
       margin: 0 auto;
@@ -350,7 +349,15 @@
 
   <div class="subtitle">Bergdriesch 32-36 &nbsp;•&nbsp; 52062 Aachen</div>
 
-  <div class="receipt-frame">
+  <div class="gif-box">
+    <div class="gif-placeholder" id="gif-placeholder">
+      <div class="icon">&#9654;</div>
+      <p>VLAD'S SURPRISE COMING SOON</p>
+    </div>
+    <img class="gif-real" id="gif-real" src="" alt="Vlad's birthday surprise">
+  </div>
+
+  <div class="receipt-frame" style="max-width:380px;margin-top:48px;">
     <div class="r-header">
       <div class="r-store">VladLand</div>
       <div class="r-addr">
@@ -412,14 +419,6 @@
     <div style="text-align:center;font-size:10px;color:#555;margin-top:4px;">
       Durch VladLand wurden 100% Traurigkeit gespart.
     </div>
-  </div>
-
-  <div class="gif-box">
-    <div class="gif-placeholder" id="gif-placeholder">
-      <div class="icon">&#9654;</div>
-      <p>VLAD'S SURPRISE COMING SOON</p>
-    </div>
-    <img class="gif-real" id="gif-real" src="" alt="Vlad's birthday surprise">
   </div>
 
   <div class="big-text">
