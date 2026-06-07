@@ -14,84 +14,113 @@
       color: var(--white);
       font-family: 'Courier Prime', monospace;
       min-height: 100vh;
+      overflow-x: hidden;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 60px 24px;
+    }
+
+    .noise {
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0;
     }
 
     .ticker {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      background: var(--yellow);
-      color: var(--black);
+      position: fixed; top: 0; left: 0; right: 0;
+      background: var(--yellow); color: var(--black);
       font-family: 'Unbounded', sans-serif;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      white-space: nowrap;
-      overflow: hidden;
-      z-index: 100;
-      padding: 6px 0;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.05em; white-space: nowrap;
+      overflow: hidden; z-index: 100; padding: 6px 0;
     }
     .ticker-inner { display: inline-block; animation: ticker 18s linear infinite; }
     @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-    .logo {
-      font-family: 'Unbounded', sans-serif;
-      font-size: 36px;
-      font-weight: 900;
-      margin-bottom: 4px;
-      margin-top: 20px;
-      opacity: 0;
-      animation: fadeUp 0.6s ease 0.1s forwards;
-    }
-    .logo span { color: var(--yellow); }
-
-    .tagline {
-      font-size: 12px;
-      color: rgba(245,240,232,0.4);
-      letter-spacing: 0.15em;
-      margin-bottom: 40px;
-      opacity: 0;
-      animation: fadeUp 0.6s ease 0.2s forwards;
-    }
-
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
+      from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .receipt-frame {
-      background: var(--paper);
-      color: #111;
-      width: 100%;
-      max-width: 380px;
-      border-radius: 2px;
-      padding: 28px 28px 20px;
-      box-shadow: 8px 8px 0 var(--yellow);
-      opacity: 0;
-      animation: fadeUp 0.8s ease 0.3s forwards;
-      position: relative;
+    .container {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 860px;
+      padding: 80px 24px 60px;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 0;
     }
 
+    .store-tag {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.25em; color: var(--yellow);
+      text-transform: uppercase; margin-bottom: 12px;
+      opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards;
+    }
+
+    .logo {
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(52px, 12vw, 88px);
+      font-weight: 900; line-height: 0.9;
+      letter-spacing: -0.03em; text-align: center;
+      margin-bottom: 8px;
+      opacity: 0; animation: fadeUp 0.7s ease 0.35s forwards;
+    }
+    .logo span { color: var(--yellow); display: block; }
+
+    .subtitle {
+      font-size: 13px; letter-spacing: 0.12em;
+      color: rgba(245,240,232,0.45); text-align: center;
+      margin-bottom: 48px;
+      opacity: 0; animation: fadeUp 0.6s ease 0.5s forwards;
+    }
+
+    /* GIF */
+    .gif-box {
+      width: 100%; text-align: center;
+      margin-bottom: 48px;
+      opacity: 0; animation: fadeUp 0.8s ease 0.65s forwards;
+    }
+    .gif-placeholder {
+      width: 100%; max-width: 800px;
+      aspect-ratio: 16/9;
+      background: #111;
+      border: 1px dashed rgba(255,230,0,0.3);
+      border-radius: 4px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      margin: 0 auto; gap: 12px;
+    }
+    .gif-placeholder p { font-size: 12px; color: rgba(255,255,255,0.3); letter-spacing: 0.1em; }
+    .gif-real {
+      width: 100%; max-width: 800px;
+      border-radius: 4px; display: none; margin: 0 auto;
+    }
+
+    /* Receipt */
+    .receipt-frame {
+      width: 100%; max-width: 380px;
+      background: var(--paper); color: #111;
+      border-radius: 2px;
+      padding: 28px 28px 20px;
+      position: relative;
+      opacity: 0; animation: fadeUp 0.8s ease 0.8s forwards;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 8px 8px 0 var(--yellow);
+    }
     .receipt-frame::before {
-      content: '';
-      position: absolute;
-      top: -12px; left: 0; right: 0;
-      height: 12px;
+      content: ''; position: absolute;
+      top: -12px; left: 0; right: 0; height: 12px;
       background: repeating-linear-gradient(90deg, var(--paper) 0px, var(--paper) 8px, transparent 8px, transparent 14px);
     }
     .receipt-frame::after {
-      content: '';
-      position: absolute;
-      bottom: -12px; left: 0; right: 0;
-      height: 12px;
+      content: ''; position: absolute;
+      bottom: -12px; left: 0; right: 0; height: 12px;
       background: repeating-linear-gradient(90deg, var(--paper) 0px, var(--paper) 8px, transparent 8px, transparent 14px);
     }
 
     .r-store { font-weight: 700; font-size: 18px; letter-spacing: 0.05em; text-align: center; }
     .r-addr { font-size: 10px; color: #555; margin-top: 2px; line-height: 1.5; text-align: center; margin-bottom: 16px; }
+    .r-customer { text-align: center; font-size: 13px; font-weight: 700; margin: 8px 0 4px; letter-spacing: 0.05em; }
     .r-divider { border: none; border-top: 1px dashed #bbb; margin: 10px 0; }
     .r-divider-solid { border: none; border-top: 1px solid #555; margin: 10px 0; }
     .r-col-header { display: flex; justify-content: space-between; font-size: 9px; color: #888; margin-bottom: 4px; }
@@ -102,111 +131,139 @@
     .r-summe { text-align: center; font-weight: 700; font-size: 13px; margin: 8px 0; line-height: 1.5; }
     .r-footer-row { display: flex; justify-content: space-between; font-size: 10px; color: #555; }
     .r-scan-hint { text-align: center; font-size: 10px; color: #666; margin: 10px 0 6px; }
-    .r-customer { text-align: center; font-size: 13px; font-weight: 700; margin: 8px 0 4px; letter-spacing: 0.05em; }
     .barcode-wrap { text-align: center; margin: 8px 0 4px; }
     .barcode-text { font-size: 9px; letter-spacing: 3px; color: #555; margin-top: 2px; }
 
-    .actions {
-      margin-top: 48px;
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      justify-content: center;
-      opacity: 0;
-      animation: fadeUp 0.6s ease 0.9s forwards;
+    /* Bottom */
+    .big-text {
+      margin-top: 48px; text-align: center;
+      opacity: 0; animation: fadeUp 0.8s ease 1.1s forwards;
     }
+    .big-text h2 {
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(28px, 7vw, 48px);
+      font-weight: 900; line-height: 1.1; letter-spacing: -0.02em;
+    }
+    .big-text h2 em { font-style: normal; color: var(--yellow); }
+    .big-text p { margin-top: 16px; font-size: 14px; color: rgba(245,240,232,0.5); line-height: 1.7; }
 
+    .actions {
+      margin-top: 40px;
+      display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+      opacity: 0; animation: fadeUp 0.6s ease 1.3s forwards;
+    }
     .btn {
       padding: 12px 24px;
       font-family: 'Unbounded', sans-serif;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      border-radius: 2px;
-      cursor: pointer;
-      text-decoration: none;
-      border: none;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.08em; border-radius: 2px;
+      cursor: pointer; text-decoration: none; border: none;
     }
-
     .btn-primary { background: var(--yellow); color: var(--black); }
     .btn-secondary { background: transparent; color: rgba(245,240,232,0.5); border: 1px solid rgba(245,240,232,0.2); }
     .btn:hover { opacity: 0.85; }
 
-    .empty-msg {
-      text-align: center;
-      font-size: 13px;
-      color: rgba(245,240,232,0.4);
-      margin: 20px 0;
-      line-height: 1.7;
+    @media (max-width: 480px) {
+      .container { padding: 70px 16px 50px; }
+      .receipt-frame { padding: 20px 16px 16px; }
     }
   </style>
 </head>
 <body>
 
+<div class="noise"></div>
+
 <div class="ticker">
   <span class="ticker-inner">
-    VLADLAND &nbsp;•&nbsp; DEIN PERSÖNLICHER BON &nbsp;•&nbsp; GUTE LAUNE UNBEGRENZT &nbsp;•&nbsp; 20.06.2026 &nbsp;•&nbsp; VLADLAND &nbsp;•&nbsp; DEIN PERSÖNLICHER BON &nbsp;•&nbsp; GUTE LAUNE UNBEGRENZT &nbsp;•&nbsp; 20.06.2026 &nbsp;•&nbsp;
+    VLADLAND &nbsp;•&nbsp; ALLES GUTE ZUM GEBURTSTAG &nbsp;•&nbsp; 13 JAHRE &nbsp;•&nbsp; 20.06.2026 &nbsp;•&nbsp; GUTE LAUNE UNBEGRENZT &nbsp;•&nbsp; DER BESTE TAG DES JAHRES &nbsp;•&nbsp; VLADLAND &nbsp;•&nbsp; ALLES GUTE ZUM GEBURTSTAG &nbsp;•&nbsp; 13 JAHRE &nbsp;•&nbsp; 20.06.2026 &nbsp;•&nbsp;
   </span>
 </div>
 
-<div class="logo">Vlad<span>Land</span></div>
-<div class="tagline">DEIN PERSÖNLICHER BON</div>
+<div class="container">
 
-<div class="receipt-frame" id="receipt">
-  <div class="r-store">VladLand</div>
-  <div class="r-addr">
-    Bergdriesch 32-36, 52062 Aachen<br>
-    VladLand GmbH • Aachen
+  <div class="store-tag">VladLand GmbH • Aachen</div>
+  <div class="logo">Vlad<span>Land</span></div>
+  <div class="subtitle">Bergdriesch 32-36 &nbsp;•&nbsp; 52062 Aachen</div>
+
+  <!-- GIF -->
+  <div class="gif-box">
+    <div class="gif-placeholder" id="gif-placeholder">
+      <p>VLAD'S SURPRISE COMING SOON</p>
+    </div>
+    <img class="gif-real" id="gif-real" src="" alt="Vlad's birthday surprise">
   </div>
 
-  <hr class="r-divider-solid">
-  <div class="r-customer" id="customer-display"></div>
-  <hr class="r-divider">
+  <!-- Receipt -->
+  <div class="receipt-frame">
+    <div class="r-store">VladLand</div>
+    <div class="r-addr">
+      Bergdriesch 32-36, 52062 Aachen<br>
+      VladLand GmbH • Aachen
+    </div>
 
-  <div class="r-col-header"><span>Artikel</span><span>Preis</span></div>
-  <hr class="r-divider">
+    <hr class="r-divider-solid">
+    <div class="r-customer" id="customer-display"></div>
+    <hr class="r-divider">
 
-  <div id="bon-items"></div>
+    <div class="r-col-header"><span>Artikel</span><span>Preis</span></div>
+    <hr class="r-divider">
 
-  <div class="r-item">
-    <span class="r-item-name">Schlechte Laune x 0 St.</span>
-    <span class="r-item-price">0,00</span>
+    <div id="bon-items"></div>
+
+    <div class="r-item">
+      <span class="r-item-name">Schlechte Laune x 0 St.</span>
+      <span class="r-item-price">0,00</span>
+    </div>
+
+    <hr class="r-divider">
+    <div class="r-discount"><span>Vlad-Sonderangebot</span><span>-100%</span></div>
+    <hr class="r-divider-solid">
+
+    <div class="r-summe">Summe:<br>Der beste Tag des Jahres!</div>
+    <hr class="r-divider-solid">
+
+    <div class="r-footer-row" id="bon-date-row"></div>
+    <div class="r-footer-row"><span>Filiale: VAG-AAG</span><span>Kasse: 01</span></div>
+
+    <hr class="r-divider">
+    <div class="r-scan-hint">Scanne &amp; erhalte eine Überraschung!</div>
+
+    <div style="text-align:center;margin:6px 0 2px;">
+      <img src="qr.png" alt="QR Code" style="width:90px;height:90px;display:block;margin:0 auto;">
+    </div>
+
+    <div class="barcode-wrap">
+      <svg width="200" height="36" viewBox="0 0 200 36" xmlns="http://www.w3.org/2000/svg" id="barcode-svg" style="display:block;margin:0 auto;"></svg>
+      <div class="barcode-text">20.06.2026 &nbsp; 13</div>
+    </div>
+
+    <hr class="r-divider">
+    <div style="text-align:center;font-size:10px;color:#555;margin-top:4px;">
+      Durch VladLand wurden 100% Traurigkeit gespart.
+    </div>
   </div>
 
-  <hr class="r-divider">
-  <div class="r-discount"><span>Vlad-Sonderangebot</span><span>-100%</span></div>
-  <hr class="r-divider-solid">
-
-  <div class="r-summe">Summe:<br>Der beste Tag des Jahres!</div>
-  <hr class="r-divider-solid">
-
-  <div class="r-footer-row" id="bon-date-row"></div>
-  <div class="r-footer-row"><span>Filiale: VAG-AAG</span><span>Kasse: 01</span></div>
-
-  <hr class="r-divider">
-  <div class="r-scan-hint">Scanne &amp; erhalte eine Überraschung!</div>
-
-  <div style="text-align:center;margin:6px 0 2px;">
-    <img src="qr.png" alt="QR Code" style="width:90px;height:90px;display:block;margin:0 auto;">
+  <div class="big-text">
+    <h2>Alles Gute,<br><em>Vlad!</em></h2>
+    <p>Heute ist dein Tag — genieß jeden Moment.</p>
   </div>
 
-  <div class="barcode-wrap">
-    <svg width="200" height="36" viewBox="0 0 200 36" xmlns="http://www.w3.org/2000/svg" id="barcode-svg" style="display:block;margin:0 auto;"></svg>
-    <div class="barcode-text">20.06.2026 &nbsp; 13</div>
+  <div class="actions">
+    <a href="index.html" class="btn btn-primary">NEUER BON →</a>
   </div>
 
-  <hr class="r-divider">
-  <div style="text-align:center;font-size:10px;color:#555;margin-top:4px;">
-    Durch VladLand wurden 100% Traurigkeit gespart.
-  </div>
-</div>
-
-<div class="actions">
-  <a href="shop.html" class="btn btn-primary">NEUER BON →</a>
-  <a href="index.html" class="btn btn-secondary">← VladLand</a>
 </div>
 
 <script>
+// GIF
+const GIF_URL = 'vlad.gif';
+if (GIF_URL) {
+  document.getElementById('gif-placeholder').style.display = 'none';
+  const img = document.getElementById('gif-real');
+  img.src = GIF_URL;
+  img.style.display = 'block';
+}
+
 // Barcode
 (function() {
   const svg = document.getElementById('barcode-svg');
@@ -232,24 +289,19 @@
   }
 })();
 
-// Load bon data
+// Load bon from localStorage
 const raw = localStorage.getItem('vladland_bon');
-if (!raw) {
-  document.getElementById('bon-items').innerHTML = '<div class="empty-msg">Kein Bon gefunden.<br>Bitte geh zurück und erstelle deinen Bon.</div>';
-} else {
+if (raw) {
   const data = JSON.parse(raw);
 
-  // Customer name
   document.getElementById('customer-display').textContent = 'Für: ' + data.name;
 
-  // Date row
-  const today = new Date().toLocaleDateString('de-DE').replace(/\//g, '.');
+  const today = new Date().toLocaleDateString('de-DE');
   document.getElementById('bon-date-row').innerHTML =
     `<span>Datum: ${today}</span><span>Bon: ${data.name}</span>`;
 
-  // Items
   const container = document.getElementById('bon-items');
-  if (data.items.length === 0) {
+  if (!data.items || data.items.length === 0) {
     container.innerHTML = '<div class="r-item"><span class="r-item-name" style="color:#aaa;font-style:italic;">Nichts ausgewählt</span></div>';
   } else {
     data.items.forEach(item => {
@@ -260,6 +312,26 @@ if (!raw) {
       container.appendChild(div);
     });
   }
+} else {
+  // No data — show Vlad's default receipt
+  document.getElementById('customer-display').textContent = 'Für: Alle';
+  document.getElementById('bon-date-row').innerHTML = '<span>Datum: 20.06.26</span><span>Bon: 13 Jahre</span>';
+  const container = document.getElementById('bon-items');
+  const defaults = [
+    "Gute Laune x Unbegrenzt",
+    "Lachen ohne Grund x 10 St.",
+    "Tanzen in der Pause x 5 St.",
+    "Süßigkeiten-Paket x 1 St.",
+    "Bester-Tag-Gefühl x Unbegr.",
+    "Freundschaft Premium x 1 St.",
+    "Glück (frisch geliefert) x 1"
+  ];
+  defaults.forEach(name => {
+    const div = document.createElement('div');
+    div.className = 'r-item';
+    div.innerHTML = `<span class="r-item-name">${name}</span><span class="r-item-price">0,00</span>`;
+    container.appendChild(div);
+  });
 }
 </script>
 </body>
